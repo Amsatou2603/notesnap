@@ -880,6 +880,21 @@ ul, ol {
   width: 100%;
 }
 
+/* Note editor page - padding pour éviter le chevauchement avec la barre d'actions */
+.note-editor-page {
+  padding-bottom: calc(var(--fab-bottom) + var(--fab-size) + var(--space-4) + var(--space-8));
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Note editor form - s'assurer que le contenu est scrollable */
+.editor-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+
 /* Notes page */
 .notes-grid {
   display: grid;
@@ -1062,6 +1077,7 @@ ul, ol {
   resize: vertical;
   min-height: 150px;
   line-height: 1.6;
+  padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
 }
 
 .form-label {
@@ -1115,12 +1131,15 @@ ul, ol {
   gap: var(--space-2);
   z-index: var(--z-sticky);
   padding: var(--space-2);
+  padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: var(--glass-border);
   border-radius: var(--radius-lg);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  max-width: calc(100% - var(--space-8));
+  width: auto;
 }
 
 /* Responsive */
@@ -1152,11 +1171,19 @@ ul, ol {
     right: var(--space-4);
     transform: none;
     flex-wrap: wrap;
+    padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
+    max-width: none;
+    width: calc(100% - var(--space-8));
   }
 
   .editor-actions button {
     flex: 1;
     min-width: calc(50% - var(--space-1));
+    font-size: var(--font-size-sm);
+  }
+
+  .note-editor-page {
+    padding-bottom: calc(var(--fab-bottom) + var(--fab-size) + var(--space-4) + var(--space-8) + var(--safe-bottom));
   }
 }
 
