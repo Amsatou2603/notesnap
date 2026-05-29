@@ -1,0 +1,217 @@
+/* ═══════════════════════════════════════════════════════
+   CreateFolderModal — Styles de la modal de création de dossier
+   ═══════════════════════════════════════════════════════ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: modalFadeIn 0.2s ease forwards;
+}
+
+.modalContent {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  animation: modalSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  overflow: hidden;
+}
+
+.modalTitle {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.modalForm {
+  padding: var(--space-4);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.formLabel {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.formInput {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--font-size-md);
+  font-family: var(--font-family);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  /* iOS fixes */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.formInput:focus {
+  border-color: var(--color-violet);
+  box-shadow: 0 0 0 3px var(--color-violet-light);
+}
+
+.formInput::placeholder {
+  color: var(--text-muted);
+}
+
+.modalActions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
+.cancelButton {
+  padding: var(--space-2) var(--space-4);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.cancelButton:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+}
+
+.cancelButton:active {
+  background: var(--bg-active);
+}
+
+.createButton {
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-violet);
+  border: 1px solid var(--color-violet);
+  border-radius: var(--radius-md);
+  color: white;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.createButton:hover:not(:disabled) {
+  background: var(--color-violet-dark);
+  border-color: var(--color-violet-dark);
+}
+
+.createButton:active:not(:disabled) {
+  background: var(--color-violet-darker);
+  border-color: var(--color-violet-darker);
+}
+
+.createButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive mobile */
+@media (max-width: 480px) {
+  .modalOverlay {
+    padding: var(--space-3);
+    padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .modalContent {
+    max-width: 100%;
+    border-radius: var(--radius-lg) var(--radius-lg) calc(var(--radius-lg) + env(safe-area-inset-bottom, 0px)) calc(var(--radius-lg) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .modalTitle {
+    font-size: var(--font-size-md);
+    padding: var(--space-3) var(--space-3) var(--space-2);
+  }
+
+  .modalForm {
+    padding: var(--space-3);
+  }
+
+  .formInput {
+    padding: var(--space-3);
+    font-size: 16px; /* iOS: 16px empêche le zoom automatique */
+  }
+
+  .modalActions {
+    flex-direction: column;
+  }
+
+  .cancelButton,
+  .createButton {
+    width: 100%;
+    padding: var(--space-3);
+  }
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .formInput {
+    font-size: 16px; /* Empêche le zoom automatique sur iOS */
+  }
+}
+
+/* Réduire les animations pour les utilisateurs qui préfèrent moins de mouvement */
+@media (prefers-reduced-motion: reduce) {
+  .modalOverlay {
+    animation: none;
+  }
+
+  .modalContent {
+    animation: none;
+  }
+}

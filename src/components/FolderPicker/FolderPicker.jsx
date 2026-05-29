@@ -1,16 +1,24 @@
 import React, { useState } from 'react'
 import styles from './FolderPicker.module.css'
+import CreateFolderModal from './CreateFolderModal'
 
 /**
  * FolderPicker — Sélecteur de dossier
  *
  * Permet de choisir ou créer un dossier pour une note
  * Affiche une liste de dossiers avec option "Sans dossier"
+ * Utilise une modal native React pour la création (compatible Safari iOS)
  */
 export default function FolderPicker({ folders, selectedFolderId, onSelect, onCreateFolder, allowCreate = true }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
   const selectedFolder = folders.find(f => f.id === selectedFolderId)
+
+  const handleCreateFolder = (name) => {
+    onCreateFolder(name)
+    setIsOpen(false)
+  }
 
   return (
     <div className={styles.folderPicker}>
@@ -98,8 +106,7 @@ export default function FolderPicker({ folders, selectedFolderId, onSelect, onCr
               type="button"
               className={styles.createButton}
               onClick={() => {
-                onCreateFolder()
-                setIsOpen(false)
+                setIsCreateModalOpen(true)
               }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -119,6 +126,13 @@ export default function FolderPicker({ folders, selectedFolderId, onSelect, onCr
           onClick={() => setIsOpen(false)}
         />
       )}
+
+      {/* Modal de création de dossier */}
+      <CreateFolderModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onCreate={handleCreateFolder}
+      />
     </div>
   )
 }

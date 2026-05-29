@@ -183,8 +183,7 @@ export default function NoteEditorPage() {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [photoOverlayOpen, currentPhotoIndex])
 
-  const handleCreateFolder = async () => {
-    const name = prompt('Nom du nouveau dossier :')
+  const handleCreateFolder = async (name) => {
     if (!name || !name.trim()) return
 
     try {
