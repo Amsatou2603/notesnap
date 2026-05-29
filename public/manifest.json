@@ -1,13 +1,13 @@
 {
   "name": "NoteSnap",
   "short_name": "NoteSnap",
-  "description": "Application de prise de notes avec photos, offline-first",
+  "description": "Vos notes avec photos, toujours disponibles — Application offline-first",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#6C63FF",
-  "background_color": "#0f0f13",
+  "background_color": "#6C63FF",
   "lang": "fr",
   "dir": "ltr",
   "categories": ["productivity", "utilities"],
@@ -25,10 +25,22 @@
       "purpose": "any"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "screenshots": [],

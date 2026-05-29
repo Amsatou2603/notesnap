@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useTheme } from './hooks/useTheme'
+import SplashScreen from './components/SplashScreen'
 import NotesPage from './pages/NotesPage'
 import FoldersPage from './pages/FoldersPage'
 import SettingsPage from './pages/SettingsPage'
@@ -52,10 +54,19 @@ function AppContent() {
 }
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true)
+
+  const handleSplashComplete = () => {
+    setShowSplash(false)
+  }
+
   return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
+    <>
+      {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </>
   )
 }
 
