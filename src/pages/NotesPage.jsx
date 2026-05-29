@@ -22,7 +22,7 @@ import { formatRelativeTime, groupByTimePeriod } from '../utils/dateUtils'
  */
 export default function NotesPage() {
   const navigate = useNavigate()
-  const { notes, loading, createNote, deleteNote } = useNotes()
+  const { notes, loading, deleteNote } = useNotes()
   const { folders } = useFolders()
   const { query, setQuery, results, isSearching, isEmpty, resetSearch } = useSearch(notes)
 
@@ -79,19 +79,8 @@ export default function NotesPage() {
     return groupByTimePeriod(results, 'updatedAt')
   }, [results, isSearching])
 
-  const handleCreateNote = async () => {
-    try {
-      const id = await createNote({
-        title: '',
-        content: '',
-        priority: 'none',
-        tags: [],
-        photos: []
-      })
-      navigate(`/note/${id}`)
-    } catch (err) {
-      alert(`Erreur lors de la création : ${err.message}`)
-    }
+  const handleCreateNote = () => {
+    navigate('/note/new')
   }
 
   const handleNoteClick = (note) => {

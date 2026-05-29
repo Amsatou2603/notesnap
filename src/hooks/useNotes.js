@@ -46,7 +46,11 @@ export function useNotes() {
   const validateNote = useCallback((noteData) => {
     const errors = []
 
-    if (!noteData.title && !noteData.content && (!noteData.photos || noteData.photos.length === 0)) {
+    const hasTitle = noteData.title && noteData.title.trim().length > 0
+    const hasContent = noteData.content && noteData.content.trim().length > 0
+    const hasPhotos = noteData.photos && noteData.photos.length > 0
+
+    if (!hasTitle && !hasContent && !hasPhotos) {
       errors.push('La note doit avoir au minimum un titre, un contenu ou une photo.')
     }
 

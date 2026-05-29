@@ -24,7 +24,7 @@ import { exportNoteToPDF, exportNotesListToPDF } from '../utils/exportUtils'
 export default function FolderViewPage() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { notes, loading, createNote, deleteNote } = useNotes()
+  const { notes, loading, deleteNote } = useNotes()
   const { folders, getFolderById, deleteFolder, moveNotesToUncategorized } = useFolders()
   
   const [folder, setFolder] = useState(null)
@@ -74,21 +74,8 @@ export default function FolderViewPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const handleCreateNote = async () => {
-    try {
-      const folderId = id === 'uncategorized' ? null : Number(id)
-      const newNote = await createNote({
-        title: '',
-        content: '',
-        priority: 'none',
-        tags: [],
-        photos: [],
-        folderId
-      })
-      navigate(`/note/${newNote}`)
-    } catch (err) {
-      alert(`Erreur lors de la création : ${err.message}`)
-    }
+  const handleCreateNote = () => {
+    navigate('/note/new')
   }
 
   const handleNoteClick = (note) => {
