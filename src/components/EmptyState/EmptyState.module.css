@@ -1,0 +1,90 @@
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-16) var(--space-6);
+  text-align: center;
+  min-height: 300px;
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+.icon {
+  font-size: 64px;
+  opacity: 0.4;
+  filter: grayscale(0.3);
+  animation: float 3s ease-in-out infinite;
+}
+
+.title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.description {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  max-width: 280px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.action {
+  margin-top: var(--space-2);
+}
+
+/* Variantes */
+.emptyState.notes .icon {
+  font-size: 72px;
+}
+
+.emptyState.folders .icon {
+  font-size: 68px;
+}
+
+.emptyState.search .icon {
+  font-size: 56px;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .emptyState {
+    padding: var(--space-12) var(--space-4);
+    min-height: 240px;
+  }
+
+  .icon {
+    font-size: 48px;
+  }
+
+  .title {
+    font-size: var(--font-size-md);
+  }
+
+  .description {
+    font-size: var(--font-size-xs);
+    max-width: 240px;
+  }
+}

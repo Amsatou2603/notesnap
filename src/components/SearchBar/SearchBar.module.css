@@ -1,0 +1,108 @@
+.searchBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  transition: all var(--transition-base);
+}
+
+.searchBar.focused {
+  border-color: var(--color-violet);
+  box-shadow: 0 0 0 3px var(--color-violet-light);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  margin-right: var(--space-3);
+  flex-shrink: 0;
+  transition: color var(--transition-base);
+}
+
+.searchBar.focused .icon {
+  color: var(--color-violet);
+}
+
+.input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+  transition: opacity var(--transition-base);
+}
+
+.input:focus::placeholder {
+  opacity: 0.5;
+}
+
+.clearButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  margin-left: var(--space-2);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.clearButton:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.clearButton:active {
+  transform: scale(0.95);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .searchBar {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .icon {
+    margin-right: var(--space-2);
+  }
+
+  .icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .input {
+    font-size: var(--font-size-sm);
+  }
+
+  .clearButton {
+    width: 20px;
+    height: 20px;
+  }
+
+  .clearButton svg {
+    width: 14px;
+    height: 14px;
+  }
+}

@@ -1,0 +1,209 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--bg-base);
+}
+
+/* Header */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--border-subtle);
+  padding-top: var(--safe-top);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  background: linear-gradient(135deg, var(--color-violet), var(--color-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.themeToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.themeToggle:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.themeToggle:active {
+  transform: scale(0.95);
+}
+
+/* Main */
+.main {
+  flex: 1;
+  padding: var(--space-6);
+  padding-bottom: calc(var(--space-6) + 80px + var(--safe-bottom));
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Bottom navigation */
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-sticky);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-top: 1px solid var(--border-subtle);
+  padding-bottom: var(--safe-bottom);
+  display: flex;
+  justify-content: center;
+}
+
+.bottomNav::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
+  pointer-events: none;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-3) var(--space-6);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+.navItem:hover {
+  color: var(--text-secondary);
+}
+
+.navItem.active {
+  color: var(--color-violet);
+}
+
+.navItem.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 3px;
+  background: var(--color-violet);
+  border-radius: var(--radius-full) var(--radius-full) 0 0;
+}
+
+.navIcon {
+  font-size: 24px;
+  transition: transform var(--transition-spring);
+}
+
+.navItem.active .navIcon {
+  transform: translateY(-2px);
+}
+
+.navLabel {
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+/* Responsive desktop */
+@media (min-width: 768px) {
+  .headerContent {
+    padding: var(--space-4) var(--space-8);
+  }
+
+  .main {
+    padding: var(--space-8);
+    padding-bottom: calc(var(--space-8) + 80px + var(--safe-bottom));
+  }
+
+  .bottomNav {
+    max-width: 400px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    border: var(--border-default);
+    border-top: 1px solid var(--border-default);
+  }
+
+  .navItem {
+    padding: var(--space-3) var(--space-5);
+  }
+}
+
+/* Responsive mobile */
+@media (max-width: 480px) {
+  .headerContent {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .title {
+    font-size: var(--font-size-lg);
+  }
+
+  .themeToggle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .main {
+    padding: var(--space-4);
+    padding-bottom: calc(var(--space-4) + 80px + var(--safe-bottom));
+  }
+
+  .navItem {
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .navIcon {
+    font-size: 20px;
+  }
+
+  .navLabel {
+    font-size: 10px;
+  }
+}
