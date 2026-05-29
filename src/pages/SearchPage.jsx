@@ -89,7 +89,7 @@ export default function SearchPage() {
   }
 
   const handleEditNote = (note) => {
-    navigate(`/note/${note.id}`)
+    navigate(`/note/${note.id}/edit`)
   }
 
   const handleDeleteNote = async (note) => {
@@ -390,7 +390,6 @@ export default function SearchPage() {
                   onClick={() => handleNoteClick(note)}
                   onEdit={() => handleEditNote(note)}
                   onDelete={() => handleDeleteNote(note)}
-                  onShare={() => handleShare(note)}
                   highlighted={isSearching}
                 />
               ))}

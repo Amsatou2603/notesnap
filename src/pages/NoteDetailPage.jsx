@@ -57,7 +57,7 @@ export default function NoteDetailPage() {
   }, [id, getNoteById, folders, navigate])
 
   const handleEdit = () => {
-    navigate(`/note/${id}`)
+    navigate(`/note/${id}/edit`)
   }
 
   const handleDelete = async () => {

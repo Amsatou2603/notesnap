@@ -83,7 +83,7 @@ export default function FolderViewPage() {
   }
 
   const handleEditNote = (note) => {
-    navigate(`/note/${note.id}`)
+    navigate(`/note/${note.id}/edit`)
   }
 
   const handleDeleteNote = async (note) => {
@@ -327,7 +327,6 @@ export default function FolderViewPage() {
                 onClick={() => handleNoteClick(note)}
                 onEdit={() => handleEditNote(note)}
                 onDelete={() => handleDeleteNote(note)}
-                onShare={() => handleShare(note)}
                 highlighted={isSearching}
               />
             ))}

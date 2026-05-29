@@ -41,8 +41,8 @@ function AppContent() {
       
       {/* Notes */}
       <Route path="/note/new" element={<NoteEditorPage />} />
-      <Route path="/note/:id" element={<NoteEditorPage />} />
-      <Route path="/note/:id/view" element={<NoteDetailPage />} />
+      <Route path="/note/:id" element={<NoteDetailPage />} />
+      <Route path="/note/:id/edit" element={<NoteEditorPage />} />
       
       {/* Paramètres */}
       <Route path="/settings" element={<SettingsPage />} />
