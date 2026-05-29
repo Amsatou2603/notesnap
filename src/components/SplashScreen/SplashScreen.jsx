@@ -1,43 +1,63 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './SplashScreen.css'
 
 /**
- * SplashScreen — Écran de chargement moderne avec animation
+ * SplashScreen — Écran de chargement premium avec animation séquencée
  * 
  * - Fond dégradé #6C63FF → #3B82F6
- * - Logo NoteSnap centré
- * - Animation fade/scale fluide
- * - Durée ~500ms maximum
- * - Transition vers l'application
+ * - Logo NoteSnap centré avec animation fade-in + scale-up
+ * - Texte "NoteSnap" avec apparition différée
+ * - Effet glow/subtle pulse sur le logo
+ * - Transition de sortie progressive avec blur
+ * - Durée totale : 2.5 à 3 secondes
+ * - Nettoyage correct des timers pour éviter memory leaks
  */
 function SplashScreen({ onComplete }) {
   const [isVisible, setIsVisible] = useState(true)
-  const [isAnimating, setIsAnimating] = useState(true)
+  const [phase, setPhase] = useState('entering') // entering, visible, exiting
+  const timersRef = useRef([])
 
   useEffect(() => {
-    // Animation d'entrée immédiate
-    const entryTimer = setTimeout(() => {
-      setIsAnimating(false)
-    }, 50)
+    // Nettoyer tous les timers au démontage
+    return () => {
+      timersRef.current.forEach(timer => clearTimeout(timer))
+      timersRef.current = []
+    }
+  }, [])
 
-    // Transition vers l'application après 500ms
-    const exitTimer = setTimeout(() => {
+  useEffect(() => {
+    // Phase 1: Entrée du splash screen (fade-in)
+    const enterTimer = setTimeout(() => {
+      setPhase('visible')
+    }, 100)
+    timersRef.current.push(enterTimer)
+
+    // Phase 2: Début de la sortie après 2.5 secondes
+    const exitStartTimer = setTimeout(() => {
+      setPhase('exiting')
+    }, 2500)
+    timersRef.current.push(exitStartTimer)
+
+    // Phase 3: Fin de la sortie et appel onComplete après 3 secondes
+    const exitEndTimer = setTimeout(() => {
       setIsVisible(false)
       if (onComplete) {
         onComplete()
       }
-    }, 500)
+    }, 3000)
+    timersRef.current.push(exitEndTimer)
 
     return () => {
-      clearTimeout(entryTimer)
-      clearTimeout(exitTimer)
+      clearTimeout(enterTimer)
+      clearTimeout(exitStartTimer)
+      clearTimeout(exitEndTimer)
     }
   }, [onComplete])
 
   if (!isVisible) return null
 
   return (
-    <div className={`splash-screen ${isAnimating ? 'splash-screen--entering' : 'splash-screen--exiting'}`}>
+    <div className={`splash-screen splash-screen--${phase}`}>
       <div className="splash-screen__content">
         <div className="splash-screen__logo">
           <svg
