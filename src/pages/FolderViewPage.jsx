@@ -178,7 +178,7 @@ export default function FolderViewPage() {
   const folderIcon = id === 'uncategorized' ? '📄' : (folder?.icon || '📁')
 
   return (
-    <Layout title={folderName}>
+    <Layout title={folderName} showBack onBack={() => navigate('/folders')}>
       <div className="folder-view-page">
         {/* En-tête du dossier */}
         <div className="folder-header" style={{ '--folder-color': folderColor }}>

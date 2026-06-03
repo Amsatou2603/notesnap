@@ -31,6 +31,10 @@ export default function NoteDetailPage() {
   
   const touchStartX = useRef(0)
   const touchEndX = useRef(0)
+  const touchStartY = useRef(0)
+  const touchEndY = useRef(0)
+  const [overlayDragY, setOverlayDragY] = useState(0)
+  const isDragging = useRef(false)
 
   useEffect(() => {
     const loadNote = async () => {
@@ -113,25 +117,49 @@ export default function NoteDetailPage() {
     }
   }
 
-  // Touch handlers pour swipe horizontal
+  // Touch handlers pour swipe horizontal + vertical (fermer)
   const handleTouchStart = (e) => {
-    touchStartX.current = e.changedTouches[0].screenX
+    const touch = e.changedTouches[0]
+    touchStartX.current = touch.screenX
+    touchStartY.current = touch.screenY
+    isDragging.current = true
+  }
+
+  const handleTouchMove = (e) => {
+    if (!isDragging.current) return
+    const touch = e.changedTouches[0]
+    const diffY = touch.screenY - touchStartY.current
+    // Seulement vers le bas
+    if (diffY > 0) {
+      setOverlayDragY(diffY)
+    }
   }
 
   const handleTouchEnd = (e) => {
-    touchEndX.current = e.changedTouches[0].screenX
-    handleSwipe()
-  }
+    const touch = e.changedTouches[0]
+    touchEndX.current = touch.screenX
+    touchEndY.current = touch.screenY
+    isDragging.current = false
 
-  const handleSwipe = () => {
-    const swipeThreshold = 50
-    const diff = touchStartX.current - touchEndX.current
-    
-    if (diff > swipeThreshold) {
-      handleNextPhoto()
-    } else if (diff < -swipeThreshold) {
-      handlePreviousPhoto()
+    const diffY = touchEndY.current - touchStartY.current
+    const diffX = touchStartX.current - touchEndX.current
+    const absDiffX = Math.abs(diffX)
+    const absDiffY = Math.abs(diffY)
+
+    // Priorité au swipe vertical (fermer) si le geste est plus vertical qu'horizontal
+    if (absDiffY > absDiffX && diffY > 80) {
+      handleClosePhotoOverlay()
+    } else if (absDiffX > absDiffY) {
+      // Swipe horizontal (navigation)
+      const swipeThreshold = 50
+      if (diffX > swipeThreshold) {
+        handleNextPhoto()
+      } else if (diffX < -swipeThreshold) {
+        handlePreviousPhoto()
+      }
     }
+
+    setOverlayDragY(0)
   }
 
   // Keyboard navigation
@@ -191,7 +219,7 @@ export default function NoteDetailPage() {
   const priorityBadge = getPriorityBadge(note.priority)
 
   return (
-    <Layout title={note.title || 'Note sans titre'}>
+    <Layout title={note.title || 'Note sans titre'} showBack>
       <div className="note-detail-page">
         {/* En-tête de la note */}
         <div className="note-detail-header">
@@ -344,8 +372,22 @@ export default function NoteDetailPage() {
           <div 
             className="photo-overlay"
             onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            onClick={(e) => {
+              // Fermer en cliquant sur le fond (pas sur l'image/boutons)
+              if (e.target === e.currentTarget) handleClosePhotoOverlay()
+            }}
+            style={{
+              opacity: overlayDragY > 0 ? Math.max(0.3, 1 - overlayDragY / 400) : 1,
+              transition: overlayDragY === 0 ? 'opacity 0.25s ease' : 'none'
+            }}
           >
+            {/* Indicateur de glissement vers le bas */}
+            <div className="photo-overlay-drag-handle">
+              <div className="photo-overlay-drag-bar" />
+            </div>
+
             <button
               className="photo-overlay-close"
               onClick={handleClosePhotoOverlay}
@@ -368,7 +410,13 @@ export default function NoteDetailPage() {
               </svg>
             </button>
 
-            <div className="photo-overlay-content">
+            <div 
+              className="photo-overlay-content"
+              style={{
+                transform: overlayDragY > 0 ? `translateY(${overlayDragY}px)` : 'none',
+                transition: overlayDragY === 0 ? 'transform 0.25s ease' : 'none'
+              }}
+            >
               <img
                 src={note.photos[currentPhotoIndex]}
                 alt={`Photo ${currentPhotoIndex + 1}`}

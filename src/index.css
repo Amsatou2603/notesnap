@@ -1647,27 +1647,62 @@ ul, ol {
   align-items: center;
   justify-content: center;
   padding: var(--space-4);
+  animation: overlayFadeIn 0.25s ease forwards;
+  touch-action: none;
+  user-select: none;
+}
+
+/* Indicateur de glissement vers le bas */
+.photo-overlay-drag-handle {
+  position: absolute;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: var(--space-2);
+  cursor: grab;
+}
+
+.photo-overlay-drag-bar {
+  width: 40px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: var(--radius-full);
+  transition: background var(--transition-base);
+}
+
+.photo-overlay-drag-handle:hover .photo-overlay-drag-bar {
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .photo-overlay-close {
   position: absolute;
-  top: var(--space-4);
+  top: calc(var(--space-4) + env(safe-area-inset-top, 0px));
   right: var(--space-4);
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-full);
   color: white;
   cursor: pointer;
   transition: all var(--transition-base);
+  z-index: 10;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .photo-overlay-close:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+
+.photo-overlay-close:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .photo-overlay-nav {
@@ -1683,10 +1718,18 @@ ul, ol {
   color: white;
   cursor: pointer;
   transition: all var(--transition-base);
+  z-index: 10;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .photo-overlay-nav:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.photo-overlay-nav:active:not(:disabled) {
+  transform: scale(0.92);
 }
 
 .photo-overlay-nav:disabled {
@@ -1709,19 +1752,34 @@ ul, ol {
   gap: var(--space-3);
   max-width: 100%;
   max-height: 100%;
+  pointer-events: none;
 }
 
 .photo-overlay-image {
   max-width: 100%;
   max-height: 80vh;
+  max-height: 80dvh;
   object-fit: contain;
   border-radius: var(--radius-md);
+  pointer-events: auto;
 }
 
 .photo-overlay-counter {
   color: white;
   font-size: var(--font-size-sm);
   font-weight: 500;
+  background: rgba(0, 0, 0, 0.5);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ── Search page styles ──────────────────────────────── */
@@ -2170,8 +2228,8 @@ ul, ol {
   }
 
   .photo-overlay-nav {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
   }
 
   .photo-overlay-prev {
@@ -2183,7 +2241,14 @@ ul, ol {
   }
 
   .photo-overlay-close {
-    top: var(--space-2);
-    right: var(--space-2);
+    top: calc(var(--space-3) + env(safe-area-inset-top, 0px));
+    right: var(--space-3);
+    width: 44px;
+    height: 44px;
+  }
+
+  .photo-overlay-image {
+    max-height: 70vh;
+    max-height: 70dvh;
   }
 }

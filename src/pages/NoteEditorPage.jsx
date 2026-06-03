@@ -41,6 +41,10 @@ export default function NoteEditorPage() {
   const textareaRef = useRef(null)
   const touchStartX = useRef(0)
   const touchEndX = useRef(0)
+  const touchStartY = useRef(0)
+  const touchEndY = useRef(0)
+  const [overlayDragY, setOverlayDragY] = useState(0)
+  const isDragging = useRef(false)
 
   // Auto-resize du textarea
   useEffect(() => {
@@ -146,23 +150,44 @@ export default function NoteEditorPage() {
   }
 
   const handleTouchStart = (e) => {
-    touchStartX.current = e.changedTouches[0].screenX
+    const touch = e.changedTouches[0]
+    touchStartX.current = touch.screenX
+    touchStartY.current = touch.screenY
+    isDragging.current = true
+  }
+
+  const handleTouchMove = (e) => {
+    if (!isDragging.current) return
+    const touch = e.changedTouches[0]
+    const diffY = touch.screenY - touchStartY.current
+    if (diffY > 0) {
+      setOverlayDragY(diffY)
+    }
   }
 
   const handleTouchEnd = (e) => {
-    touchEndX.current = e.changedTouches[0].screenX
-    handleSwipe()
-  }
+    const touch = e.changedTouches[0]
+    touchEndX.current = touch.screenX
+    touchEndY.current = touch.screenY
+    isDragging.current = false
 
-  const handleSwipe = () => {
-    const swipeThreshold = 50
-    const diff = touchStartX.current - touchEndX.current
-    
-    if (diff > swipeThreshold) {
-      handleNextPhoto()
-    } else if (diff < -swipeThreshold) {
-      handlePreviousPhoto()
+    const diffY = touchEndY.current - touchStartY.current
+    const diffX = touchStartX.current - touchEndX.current
+    const absDiffX = Math.abs(diffX)
+    const absDiffY = Math.abs(diffY)
+
+    if (absDiffY > absDiffX && diffY > 80) {
+      handleClosePhotoOverlay()
+    } else if (absDiffX > absDiffY) {
+      const swipeThreshold = 50
+      if (diffX > swipeThreshold) {
+        handleNextPhoto()
+      } else if (diffX < -swipeThreshold) {
+        handlePreviousPhoto()
+      }
     }
+
+    setOverlayDragY(0)
   }
 
   // Keyboard navigation pour l'overlay photos
@@ -202,7 +227,7 @@ export default function NoteEditorPage() {
   const currentFolder = folderId ? folders.find(f => f.id === folderId) : null
 
   return (
-    <Layout title={isNew ? 'Nouvelle note' : 'Modifier la note'}>
+    <Layout title={isNew ? 'Nouvelle note' : 'Modifier la note'} showBack>
       <div className="note-editor-page">
         <div className="editor-form">
           {/* Titre */}
@@ -374,8 +399,20 @@ export default function NoteEditorPage() {
           <div 
             className="photo-overlay"
             onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) handleClosePhotoOverlay()
+            }}
+            style={{
+              opacity: overlayDragY > 0 ? Math.max(0.3, 1 - overlayDragY / 400) : 1,
+              transition: overlayDragY === 0 ? 'opacity 0.25s ease' : 'none'
+            }}
           >
+            <div className="photo-overlay-drag-handle">
+              <div className="photo-overlay-drag-bar" />
+            </div>
+
             <button
               className="photo-overlay-close"
               onClick={handleClosePhotoOverlay}
@@ -398,7 +435,13 @@ export default function NoteEditorPage() {
               </svg>
             </button>
 
-            <div className="photo-overlay-content">
+            <div 
+              className="photo-overlay-content"
+              style={{
+                transform: overlayDragY > 0 ? `translateY(${overlayDragY}px)` : 'none',
+                transition: overlayDragY === 0 ? 'transform 0.25s ease' : 'none'
+              }}
+            >
               <img
                 src={photos[currentPhotoIndex]}
                 alt={`Photo ${currentPhotoIndex + 1}`}

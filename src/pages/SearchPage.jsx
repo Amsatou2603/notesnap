@@ -158,7 +158,7 @@ export default function SearchPage() {
   ].filter(Boolean).length
 
   return (
-    <Layout title="Recherche">
+    <Layout title="Recherche" showBack onBack={() => navigate('/')}>
       <div className="search-page">
         {/* Barre de recherche principale */}
         <div className="search-header">

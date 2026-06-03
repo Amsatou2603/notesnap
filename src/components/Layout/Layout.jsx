@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTheme } from '../../hooks/useTheme'
 import styles from './Layout.module.css'
 
@@ -7,13 +7,27 @@ import styles from './Layout.module.css'
  * Layout — Layout principal avec bottom navigation
  *
  * Structure :
- * - Header avec titre et toggle thème
+ * - Header avec titre, bouton retour optionnel, et toggle thème
  * - Main content area
  * - Bottom navigation fixe
+ *
+ * Props :
+ * - title: titre affiché dans le header
+ * - showBack: si true, affiche un bouton retour
+ * - onBack: callback optionnel pour le bouton retour (sinon navigate(-1))
  */
-export default function Layout({ children, title }) {
+export default function Layout({ children, title, showBack = false, onBack }) {
   const location = useLocation()
+  const navigate = useNavigate()
   const { isDark, toggleTheme } = useTheme()
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack()
+    } else {
+      navigate(-1)
+    }
+  }
 
   const navItems = [
     { path: '/', label: 'Notes', icon: '📝' },
@@ -26,7 +40,21 @@ export default function Layout({ children, title }) {
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.headerContent}>
-          <h1 className={styles.title}>{title}</h1>
+          <div className={styles.headerLeft}>
+            {showBack && (
+              <button
+                type="button"
+                className={styles.backButton}
+                onClick={handleBack}
+                aria-label="Retour"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
+            )}
+            <h1 className={styles.title}>{title}</h1>
+          </div>
           <button
             type="button"
             className={styles.themeToggle}
